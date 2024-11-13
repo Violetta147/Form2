@@ -1,9 +1,20 @@
 #include "MyForm.h"
+//#include "Neon.h"
+#include "TransparentRenderer.h"
 
 Form2::MyForm::MyForm(void)
 {
 	InitializeComponent();
 	formSize = this->ClientSize;
+	this->MAINBUTTON->Renderer = gcnew TransparentRenderer();
+	//this->MAINBUTTON->Renderer = gcnew NeonMenuRenderer(); // this can be gone if i modify the designer file if it lies in the InitializeCOmponent function
+	// Attach MouseEnter and MouseLeave events to all ToolStripMenuItems
+	for each (ToolStripMenuItem ^ item in MAINBUTTON->Items)
+	{
+		item->MouseEnter += gcnew System::EventHandler(this, &Form2::MyForm::OnMenuItemHover);
+		item->MouseLeave += gcnew System::EventHandler(this, &Form2::MyForm::OnMenuItemLeave);
+	}
+	this->MAINBUTTON->Paint += gcnew PaintEventHandler(this, &Form2::MyForm::OnMenuStripPaint); //draw whiteline
 }
 
 Form2::MyForm::~MyForm()
@@ -13,65 +24,107 @@ Form2::MyForm::~MyForm()
 		delete components;
 	}
 }
-
 void Form2::MyForm::InitializeComponent(void)
 {
 	System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 	this->MAINBUTTON = (gcnew System::Windows::Forms::MenuStrip());
 	this->TEAMS = (gcnew System::Windows::Forms::ToolStripMenuItem());
+	this->PLAYERS = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->MATCHES = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->STATS = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->RANKING = (gcnew System::Windows::Forms::ToolStripMenuItem());
+	this->ContainerPanel = (gcnew System::Windows::Forms::Panel());
 	this->MAINBUTTON->SuspendLayout();
 	this->SuspendLayout();
-
+	// 
 	// MAINBUTTON
+	// 
 	this->MAINBUTTON->AutoSize = false;
 	this->MAINBUTTON->BackColor = System::Drawing::Color::Transparent;
 	this->MAINBUTTON->Font = (gcnew System::Drawing::Font(L"Showcard Gothic", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 		static_cast<System::Byte>(0)));
 	this->MAINBUTTON->ImageScalingSize = System::Drawing::Size(20, 20);
-	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
-		this->TEAMS, this->MATCHES,
-			this->STATS, this->RANKING
+	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
+		this->TEAMS, this->PLAYERS,
+			this->MATCHES, this->STATS, this->RANKING
 	});
 	this->MAINBUTTON->Location = System::Drawing::Point(0, 0);
 	this->MAINBUTTON->Name = L"MAINBUTTON";
-	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(185, 2, 185, 2);
-	this->MAINBUTTON->Size = System::Drawing::Size(1200, 64);
+	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(80, 2, 80, 2);
+	this->MAINBUTTON->Size = System::Drawing::Size(1200, 65);
 	this->MAINBUTTON->TabIndex = 0;
 	this->MAINBUTTON->Text = L"menuStrip1";
+	// 
 	// TEAMS
+	// 
 	this->TEAMS->AutoSize = false;
+	this->TEAMS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
 	this->TEAMS->ForeColor = System::Drawing::Color::White;
 	this->TEAMS->Name = L"TEAMS";
 	this->TEAMS->Size = System::Drawing::Size(200, 24);
 	this->TEAMS->Text = L"TEAMS";
+	// 
+	// PLAYERS
+	// 
+	this->PLAYERS->AutoSize = false;
+	this->PLAYERS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
+	this->PLAYERS->ForeColor = System::Drawing::Color::White;
+	this->PLAYERS->Name = L"PLAYERS";
+	this->PLAYERS->Size = System::Drawing::Size(200, 24);
+	this->PLAYERS->Text = L"PLAYERS";
+	// 
 	// MATCHES
+	// 
 	this->MATCHES->AutoSize = false;
+	this->MATCHES->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
 	this->MATCHES->ForeColor = System::Drawing::Color::White;
 	this->MATCHES->Name = L"MATCHES";
 	this->MATCHES->Size = System::Drawing::Size(200, 24);
 	this->MATCHES->Text = L"MATCHES";
+	// 
 	// STATS
+	// 
 	this->STATS->AutoSize = false;
+	this->STATS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
 	this->STATS->ForeColor = System::Drawing::Color::White;
 	this->STATS->Name = L"STATS";
 	this->STATS->Size = System::Drawing::Size(200, 24);
 	this->STATS->Text = L"STATS";
+	// 
 	// RANKING
+	// 
 	this->RANKING->AutoSize = false;
+	this->RANKING->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
 	this->RANKING->ForeColor = System::Drawing::Color::White;
 	this->RANKING->Name = L"RANKING";
 	this->RANKING->Size = System::Drawing::Size(200, 24);
 	this->RANKING->Text = L"RANKING";
+	// 
+	// ContainerPanel
+	// 
+	this->ContainerPanel->BackColor = System::Drawing::Color::Transparent;
+	this->ContainerPanel->Dock = System::Windows::Forms::DockStyle::Fill;
+	this->ContainerPanel->Location = System::Drawing::Point(0, 65);
+	this->ContainerPanel->Name = L"ContainerPanel";
+	this->ContainerPanel->Size = System::Drawing::Size(1200, 635);
+	this->ContainerPanel->TabIndex = 1;
+	// 
 	// MyForm
+	// 
 	this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 	this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 	this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 	this->ClientSize = System::Drawing::Size(1200, 700);
+	this->Controls->Add(this->ContainerPanel);
 	this->Controls->Add(this->MAINBUTTON);
+	this->DoubleBuffered = true;
+	this->ForeColor = System::Drawing::SystemColors::ControlText;
 	this->MainMenuStrip = this->MAINBUTTON;
 	this->Name = L"MyForm";
 	this->ShowIcon = false;
@@ -83,13 +136,14 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MAINBUTTON->ResumeLayout(false);
 	this->MAINBUTTON->PerformLayout();
 	this->ResumeLayout(false);
+
 }
 
 void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)
 {
 	// Container width (MenuStrip)
 	int containerWidth = this->ClientSize.Width;
-	int numButtons = 4;
+	int numButtons = 5;
 	int padding = 10; // Padding between buttons (space between buttons)
 
 	// Subtract left and right margins for centering the buttons
@@ -217,4 +271,64 @@ void Form2::MyForm::WndProc(System::Windows::Forms::Message% m)
 			this->Size = formSize;
 	}
 	System::Windows::Forms::Form::WndProc(m);
+}
+
+void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
+{	
+	hoveredItem = dynamic_cast<ToolStripMenuItem^>(sender);
+	hoveredIndex = this->MAINBUTTON->Items->IndexOf(hoveredItem);
+	if (hoveredItem != nullptr) {
+		hoveredItem->ForeColor = Color::LimeGreen;
+	}
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+}
+
+void Form2::MyForm::OnMenuItemLeave(Object^ sender, EventArgs^ e)
+{
+	if (hoveredItem != nullptr) {
+		// Revert the text color back to the default 
+		hoveredItem->ForeColor = Color::FromArgb(120, Color::White);
+	}
+	hoveredItem = nullptr;
+	hoveredIndex = -1;
+	this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+}
+
+void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
+{
+	Graphics^ g = e->Graphics;
+	Pen^ pen = gcnew Pen(Color::FromArgb(120, Color::White));
+
+	int startX = this->TEAMS->Bounds.Left + 10;
+	int endX = this->RANKING->Bounds.Right - 10;
+
+	int lineY = this->MAINBUTTON->Height - 15;
+
+	g->DrawLine(pen, startX, lineY, endX, lineY);	
+	
+	if (hoveredItem != nullptr && hoveredIndex != -1 )
+	{
+		Pen^ hoverPen = gcnew Pen(Color::LimeGreen, 2.0f);
+		Rectangle itemBounds = hoveredItem->Bounds;
+		int segmentStartX = itemBounds.Left + 10;
+		int segmentEndX = itemBounds.Right - 10;
+		g->DrawLine(hoverPen, segmentStartX, lineY, segmentEndX, lineY);
+		delete hoverPen;
+	}
+	delete pen;
+}
+void Form2::MyForm::OpenChildForm(Form^ childForm, System::Windows::Forms::Panel^ panel)
+{
+	if (activeForm != nullptr)
+	{
+		activeForm->Close();
+	}
+}
+
+void Form2::MyForm::ResetButtonColors()
+{
+	for each (ToolStripMenuItem ^ item in MAINBUTTON->Items)
+	{
+		item->ForeColor = Color::FromArgb(120, Color::White);
+	}
 }
