@@ -124,6 +124,7 @@
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Neon.cpp" />
     <ClCompile Include="TransparentRenderer.cpp" />
+    <ClCompile Include="UC_TEAMS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -131,10 +132,16 @@
     </ClInclude>
     <ClInclude Include="Neon.h" />
     <ClInclude Include="TransparentRenderer.h" />
+    <ClInclude Include="UC_TEAMS.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_TEAMS.resx">
+      <DependentUpon>UC_TEAMS.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -28,6 +28,7 @@ void Form2::MyForm::InitializeComponent(void)
 {
 	System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 	this->MAINBUTTON = (gcnew System::Windows::Forms::MenuStrip());
+	this->HOME = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->TEAMS = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->PLAYERS = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->MATCHES = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -44,16 +45,27 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MAINBUTTON->Font = (gcnew System::Drawing::Font(L"Showcard Gothic", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 		static_cast<System::Byte>(0)));
 	this->MAINBUTTON->ImageScalingSize = System::Drawing::Size(20, 20);
-	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {
-		this->TEAMS, this->PLAYERS,
-			this->MATCHES, this->STATS, this->RANKING
+	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
+		this->HOME, this->TEAMS,
+			this->PLAYERS, this->MATCHES, this->STATS, this->RANKING
 	});
 	this->MAINBUTTON->Location = System::Drawing::Point(0, 0);
 	this->MAINBUTTON->Name = L"MAINBUTTON";
-	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(80, 2, 80, 2);
+	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(240, 2, 240, 2);
 	this->MAINBUTTON->Size = System::Drawing::Size(1200, 65);
 	this->MAINBUTTON->TabIndex = 0;
 	this->MAINBUTTON->Text = L"menuStrip1";
+	// 
+	// HOME
+	// 
+	this->HOME->AutoSize = false;
+	this->HOME->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
+	this->HOME->ForeColor = System::Drawing::Color::White;
+	this->HOME->Name = L"HOME";
+	this->HOME->Size = System::Drawing::Size(120, 24);
+	this->HOME->Text = L"HOME";
+	this->HOME->Click += gcnew System::EventHandler(this, &MyForm::HOME_Click);
 	// 
 	// TEAMS
 	// 
@@ -62,8 +74,9 @@ void Form2::MyForm::InitializeComponent(void)
 		static_cast<System::Byte>(0)));
 	this->TEAMS->ForeColor = System::Drawing::Color::White;
 	this->TEAMS->Name = L"TEAMS";
-	this->TEAMS->Size = System::Drawing::Size(200, 24);
+	this->TEAMS->Size = System::Drawing::Size(120, 24);
 	this->TEAMS->Text = L"TEAMS";
+	this->TEAMS->Click += gcnew System::EventHandler(this, &MyForm::TEAMS_Click);
 	// 
 	// PLAYERS
 	// 
@@ -72,7 +85,7 @@ void Form2::MyForm::InitializeComponent(void)
 		static_cast<System::Byte>(0)));
 	this->PLAYERS->ForeColor = System::Drawing::Color::White;
 	this->PLAYERS->Name = L"PLAYERS";
-	this->PLAYERS->Size = System::Drawing::Size(200, 24);
+	this->PLAYERS->Size = System::Drawing::Size(120, 24);
 	this->PLAYERS->Text = L"PLAYERS";
 	// 
 	// MATCHES
@@ -82,7 +95,7 @@ void Form2::MyForm::InitializeComponent(void)
 		static_cast<System::Byte>(0)));
 	this->MATCHES->ForeColor = System::Drawing::Color::White;
 	this->MATCHES->Name = L"MATCHES";
-	this->MATCHES->Size = System::Drawing::Size(200, 24);
+	this->MATCHES->Size = System::Drawing::Size(120, 24);
 	this->MATCHES->Text = L"MATCHES";
 	// 
 	// STATS
@@ -92,7 +105,7 @@ void Form2::MyForm::InitializeComponent(void)
 		static_cast<System::Byte>(0)));
 	this->STATS->ForeColor = System::Drawing::Color::White;
 	this->STATS->Name = L"STATS";
-	this->STATS->Size = System::Drawing::Size(200, 24);
+	this->STATS->Size = System::Drawing::Size(120, 24);
 	this->STATS->Text = L"STATS";
 	// 
 	// RANKING
@@ -102,7 +115,7 @@ void Form2::MyForm::InitializeComponent(void)
 		static_cast<System::Byte>(0)));
 	this->RANKING->ForeColor = System::Drawing::Color::White;
 	this->RANKING->Name = L"RANKING";
-	this->RANKING->Size = System::Drawing::Size(200, 24);
+	this->RANKING->Size = System::Drawing::Size(120, 24);
 	this->RANKING->Text = L"RANKING";
 	// 
 	// ContainerPanel
@@ -143,7 +156,7 @@ void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)
 {
 	// Container width (MenuStrip)
 	int containerWidth = this->ClientSize.Width;
-	int numButtons = 5;
+	int numButtons = 6;
 	int padding = 10; // Padding between buttons (space between buttons)
 
 	// Subtract left and right margins for centering the buttons
@@ -277,7 +290,9 @@ void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
 {	
 	hoveredItem = dynamic_cast<ToolStripMenuItem^>(sender);
 	hoveredIndex = this->MAINBUTTON->Items->IndexOf(hoveredItem);
-	if (hoveredItem != nullptr) {
+	//currentMenuItem only changes state when there is event of click a button and if 
+	//next button click is not the same as the previous one
+	if (hoveredItem != nullptr && hoveredItem != currentMenuItem) {
 		hoveredItem->ForeColor = Color::LimeGreen;
 	}
 		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
@@ -285,7 +300,7 @@ void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
 
 void Form2::MyForm::OnMenuItemLeave(Object^ sender, EventArgs^ e)
 {
-	if (hoveredItem != nullptr) {
+	if (hoveredItem != nullptr && hoveredItem != currentMenuItem) {
 		// Revert the text color back to the default 
 		hoveredItem->ForeColor = Color::FromArgb(120, Color::White);
 	}
@@ -299,7 +314,7 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 	Graphics^ g = e->Graphics;
 	Pen^ pen = gcnew Pen(Color::FromArgb(120, Color::White));
 
-	int startX = this->TEAMS->Bounds.Left + 10;
+	int startX = this->HOME->Bounds.Left + 10;
 	int endX = this->RANKING->Bounds.Right - 10;
 
 	int lineY = this->MAINBUTTON->Height - 15;
@@ -315,20 +330,45 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 		g->DrawLine(hoverPen, segmentStartX, lineY, segmentEndX, lineY);
 		delete hoverPen;
 	}
+	if (currentMenuItem != nullptr) //no else?
+	{
+		currentMenuItem->ForeColor = Color::LimeGreen;
+		Rectangle itemBounds = currentMenuItem->Bounds;
+		int segmentStartX = itemBounds.Left + 10;
+		int segmentEndX = itemBounds.Right - 10;
+		Pen^ currentPen = gcnew Pen(Color::LimeGreen, 2.0f);
+		g->DrawLine(currentPen, segmentStartX, lineY, segmentEndX, lineY);
+		delete currentPen;
+	}	
 	delete pen;
 }
-void Form2::MyForm::OpenChildForm(Form^ childForm, System::Windows::Forms::Panel^ panel)
-{
-	if (activeForm != nullptr)
-	{
-		activeForm->Close();
-	}
-}
-
+//before changing the color of the button, the previous button color must be reset
 void Form2::MyForm::ResetButtonColors()
 {
 	for each (ToolStripMenuItem ^ item in MAINBUTTON->Items)
 	{
 		item->ForeColor = Color::FromArgb(120, Color::White);
 	}
+}
+
+System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		//draw the line under the current button
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+		// Add the user control to the panel
+		UC_TEAMS^ ucTeams = gcnew Form2::UC_TEAMS();
+		addUserControl(ucTeams);
+	}
+}
+System::Void Form2::MyForm::addUserControl(UserControl^ userControl)
+{	
+	//why this doesn't check if that's the first time the userControl is added?
+	userControl->Dock = DockStyle::Fill;
+	this->ContainerPanel->Controls->Clear(); //can this be hidden?
+	this->ContainerPanel->Controls->Add(userControl);
+	userControl->BringToFront();
 }

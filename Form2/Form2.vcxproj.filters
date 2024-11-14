@@ -24,12 +24,24 @@
     <ClCompile Include="Neon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TransparentRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UC_TEAMS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Neon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransparentRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UC_TEAMS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
