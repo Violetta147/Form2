@@ -65,7 +65,6 @@ void Form2::MyForm::InitializeComponent(void)
 	this->HOME->Name = L"HOME";
 	this->HOME->Size = System::Drawing::Size(120, 24);
 	this->HOME->Text = L"HOME";
-	this->HOME->Click += gcnew System::EventHandler(this, &MyForm::HOME_Click);
 	// 
 	// TEAMS
 	// 

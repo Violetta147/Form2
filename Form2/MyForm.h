@@ -22,6 +22,7 @@ namespace Form2 {
 		System::ComponentModel::Container^ components;
 		System::Drawing::Size formSize;
 		System::Windows::Forms::MenuStrip^ MAINBUTTON;
+		System::Windows::Forms::ToolStripMenuItem^ HOME;
 		System::Windows::Forms::ToolStripMenuItem^ TEAMS;
 		System::Windows::Forms::ToolStripMenuItem^ MATCHES;
 		System::Windows::Forms::ToolStripMenuItem^ STATS;
@@ -31,23 +32,20 @@ namespace Form2 {
 		System::Windows::Forms::ToolStripMenuItem^ currentMenuItem = nullptr;
 		int hoveredIndex = -1;
 		bool dragging = false;
-	private: System::Windows::Forms::Panel^ ContainerPanel;
-	private: System::Windows::Forms::ToolStripMenuItem^ HOME;
+		System::Windows::Forms::Panel^ ContainerPanel;
 
 		   Point offset;
 
-		void InitializeComponent(void);
-		void OnResize(Object^ sender, EventArgs^ e);
-		System::Void OnMouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
-		System::Void OnMouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
-		System::Void OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
-		System::Void TEAMS_Click(System::Object^ sender, System::EventArgs^ e);
-		void OnMenuItemHover(Object^ sender, EventArgs^ e);
-		void OnMenuItemLeave(Object^ sender, EventArgs^ e);
-		void OnMenuStripPaint(Object^ sender, PaintEventArgs^ e);
-		void ResetButtonColors();
-		System::Void addUserControl(UserControl^ userControl);
-	private: System::Void HOME_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
+		   void InitializeComponent(void);
+		   void OnResize(Object^ sender, EventArgs^ e);
+		   System::Void OnMouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		   System::Void OnMouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		   System::Void OnMouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+		   System::Void TEAMS_Click(System::Object^ sender, System::EventArgs^ e);
+		   void OnMenuItemHover(Object^ sender, EventArgs^ e);
+		   void OnMenuItemLeave(Object^ sender, EventArgs^ e);
+		   void OnMenuStripPaint(Object^ sender, PaintEventArgs^ e);
+		   void ResetButtonColors();
+		   System::Void addUserControl(UserControl^ userControl);
 	};
 }

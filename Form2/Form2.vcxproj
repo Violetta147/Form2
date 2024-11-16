@@ -81,7 +81,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
@@ -110,6 +110,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -131,6 +133,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Neon.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="TransparentRenderer.h" />
     <ClInclude Include="UC_TEAMS.h">
       <FileType>CppControl</FileType>
@@ -143,6 +146,51 @@
     <EmbeddedResource Include="UC_TEAMS.resx">
       <DependentUpon>UC_TEAMS.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Form2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button10_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button11_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button12_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button13_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button14_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button15_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button16_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button17_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button18_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button19_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button1_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button20_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button2_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button3_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button4_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button5_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button6_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button7_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button8_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Copy of Untitled\button9_Hover.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button10_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button11_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button12_Liverpool.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button13_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button14_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button15_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button16_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button17_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button18_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button19_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button1_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button20_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button2_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button3_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button4_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button5_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button6_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button7_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button8_Default.png" />
+    <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button9_Default.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
