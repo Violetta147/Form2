@@ -1,14 +1,30 @@
 #include "MyForm.h"
-//#include "Neon.h"
-#include "TransparentRenderer.h"
+
+using json = nlohmann::ordered_json;
+	//const int WM_NCCALCSIZE = 0x0083;
+	//const int WM_SYSCOMMAND = 0x0112;
+	//const int SC_MINIMIZE = 0xF020;
+	//const int SC_RESTORE = 0xF120;
+	//const int WM_NCHITTEST = 0x0084;
+
+	//// Resize/WM_NCHITTEST values
+	//const int HTCLIENT = 1;
+	//const int HTLEFT = 10;
+	//const int HTRIGHT = 11;
+	//const int HTTOP = 12;
+	//const int HTTOPLEFT = 13;
+	//const int HTTOPRIGHT = 14;
+	//const int HTBOTTOM = 15;
+	//const int HTBOTTOMLEFT = 16;
+	//const int HTBOTTOMRIGHT = 17;
 
 Form2::MyForm::MyForm(void)
 {
 	InitializeComponent();
+	tour = new Tournament(read_tournament("tournament.json")); // does this lead to wrong memory management?
+	tour->get_all_data();
 	formSize = this->ClientSize;
 	this->MAINBUTTON->Renderer = gcnew TransparentRenderer();
-	//this->MAINBUTTON->Renderer = gcnew NeonMenuRenderer(); // this can be gone if i modify the designer file if it lies in the InitializeCOmponent function
-	// Attach MouseEnter and MouseLeave events to all ToolStripMenuItems
 	for each (ToolStripMenuItem ^ item in MAINBUTTON->Items)
 	{
 		item->MouseEnter += gcnew System::EventHandler(this, &Form2::MyForm::OnMenuItemHover);
@@ -208,24 +224,8 @@ void Form2::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::Mo
 
 void Form2::MyForm::WndProc(System::Windows::Forms::Message% m) 
 {
-	const int WM_NCCALCSIZE = 0x0083;
-	const int WM_SYSCOMMAND = 0x0112;
-	const int SC_MINIMIZE = 0xF020;
-	const int SC_RESTORE = 0xF120;
-	const int WM_NCHITTEST = 0x0084;
+
 	const int resizeAreaSize = 10;
-
-	// Resize/WM_NCHITTEST values
-	const int HTCLIENT = 1;
-	const int HTLEFT = 10;
-	const int HTRIGHT = 11;
-	const int HTTOP = 12;
-	const int HTTOPLEFT = 13;
-	const int HTTOPRIGHT = 14;
-	const int HTBOTTOM = 15;
-	const int HTBOTTOMLEFT = 16;
-	const int HTBOTTOMRIGHT = 17;
-
 	if (m.Msg == WM_NCHITTEST)
 	{
 		System::Windows::Forms::Form::WndProc(m);
@@ -323,7 +323,7 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 	if (hoveredItem != nullptr && hoveredIndex != -1 )
 	{
 		Pen^ hoverPen = gcnew Pen(Color::LimeGreen, 2.0f);
-		Rectangle itemBounds = hoveredItem->Bounds;
+        System::Drawing::Rectangle itemBounds = hoveredItem->Bounds;
 		int segmentStartX = itemBounds.Left + 10;
 		int segmentEndX = itemBounds.Right - 10;
 		g->DrawLine(hoverPen, segmentStartX, lineY, segmentEndX, lineY);
@@ -332,7 +332,7 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 	if (currentMenuItem != nullptr) //no else?
 	{
 		currentMenuItem->ForeColor = Color::LimeGreen;
-		Rectangle itemBounds = currentMenuItem->Bounds;
+        System::Drawing::Rectangle itemBounds = currentMenuItem->Bounds;
 		int segmentStartX = itemBounds.Left + 10;
 		int segmentEndX = itemBounds.Right - 10;
 		Pen^ currentPen = gcnew Pen(Color::LimeGreen, 2.0f);
@@ -359,7 +359,7 @@ System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArg
 		//draw the line under the current button
 		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
 		// Add the user control to the panel
-		UC_TEAMS^ ucTeams = gcnew Form2::UC_TEAMS();
+		UC_TEAMS^ ucTeams = gcnew Form2::UC_TEAMS(tour);
 		addUserControl(ucTeams);
 	}
 }

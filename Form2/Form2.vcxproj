@@ -122,13 +122,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="file-handling\read.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Neon.cpp" />
+    <ClCompile Include="Src\Coach.cpp" />
+    <ClCompile Include="Src\datetime.cpp" />
+    <ClCompile Include="Src\Event.cpp" />
+    <ClCompile Include="Src\file_handler.cpp" />
+    <ClCompile Include="Src\Human.cpp" />
+    <ClCompile Include="Src\Match.cpp" />
+    <ClCompile Include="Src\Player.cpp" />
+    <ClCompile Include="Src\Team.cpp" />
+    <ClCompile Include="Src\Tournament.cpp" />
     <ClCompile Include="TransparentRenderer.cpp" />
     <ClCompile Include="UC_TEAMS.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Coach.h" />
+    <ClInclude Include="include\datetime.h" />
+    <ClInclude Include="include\Event.h" />
+    <ClInclude Include="include\file_handler.h" />
+    <ClInclude Include="include\Human.h" />
+    <ClInclude Include="include\Match.h" />
+    <ClInclude Include="include\nlohmann\json.hpp" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Team.h" />
+    <ClInclude Include="include\Tournament.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -191,6 +211,16 @@
     <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button7_Default.png" />
     <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button8_Default.png" />
     <Image Include="..\..\..\..\VIOLETTA\Pictures\GUI\Logo\Untitled design\button9_Default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\2024\coaches.json" />
+    <None Include="data\2024\matches.json" />
+    <None Include="data\2024\players.json" />
+    <None Include="data\2024\teams.json" />
+    <None Include="data\tournament.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="file-handling\country.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

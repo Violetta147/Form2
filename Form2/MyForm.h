@@ -1,6 +1,19 @@
 ﻿#pragma once
 #include <cmath>
 #include "UC_TEAMS.h"
+#include "TransparentRenderer.h"
+#include "include/Event.h"
+#include "include/Team.h"
+#include "include/Player.h"
+#include "include/Match.h"
+#include "include/Tournament.h"
+#include "include/file_handler.h"
+#include "include/nlohmann/json.hpp"
+#include <iostream>
+#include <fstream>
+#include <unordered_map>
+#include <unordered_set>
+#include <iomanip>
 
 namespace Form2 {
 
@@ -30,11 +43,11 @@ namespace Form2 {
 		System::Windows::Forms::ToolStripMenuItem^ PLAYERS;
 		System::Windows::Forms::ToolStripMenuItem^ hoveredItem = nullptr;
 		System::Windows::Forms::ToolStripMenuItem^ currentMenuItem = nullptr;
+		System::Windows::Forms::Panel^ ContainerPanel;
 		int hoveredIndex = -1;
 		bool dragging = false;
-		System::Windows::Forms::Panel^ ContainerPanel;
-
-		   Point offset;
+		Point offset;
+		Tournament* tour;
 
 		   void InitializeComponent(void);
 		   void OnResize(Object^ sender, EventArgs^ e);
