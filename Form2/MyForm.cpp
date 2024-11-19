@@ -1,22 +1,6 @@
 #include "MyForm.h"
 
 using json = nlohmann::ordered_json;
-	//const int WM_NCCALCSIZE = 0x0083;
-	//const int WM_SYSCOMMAND = 0x0112;
-	//const int SC_MINIMIZE = 0xF020;
-	//const int SC_RESTORE = 0xF120;
-	//const int WM_NCHITTEST = 0x0084;
-
-	//// Resize/WM_NCHITTEST values
-	//const int HTCLIENT = 1;
-	//const int HTLEFT = 10;
-	//const int HTRIGHT = 11;
-	//const int HTTOP = 12;
-	//const int HTTOPLEFT = 13;
-	//const int HTTOPRIGHT = 14;
-	//const int HTBOTTOM = 15;
-	//const int HTBOTTOMLEFT = 16;
-	//const int HTBOTTOMRIGHT = 17;
 
 Form2::MyForm::MyForm(void)
 {
@@ -225,6 +209,22 @@ void Form2::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::Mo
 void Form2::MyForm::WndProc(System::Windows::Forms::Message% m) 
 {
 
+	const int WM_NCCALCSIZE = 0x0083;
+	const int WM_SYSCOMMAND = 0x0112;
+	const int SC_MINIMIZE = 0xF020;
+	const int SC_RESTORE = 0xF120;
+	const int WM_NCHITTEST = 0x0084;
+
+	//Resize/WM_NCHITTEST values
+	const int HTCLIENT = 1;
+	const int HTLEFT = 10;
+	const int HTRIGHT = 11;
+	const int HTTOP = 12;
+	const int HTTOPLEFT = 13;
+	const int HTTOPRIGHT = 14;
+	const int HTBOTTOM = 15;
+	const int HTBOTTOMLEFT = 16;
+	const int HTBOTTOMRIGHT = 17;
 	const int resizeAreaSize = 10;
 	if (m.Msg == WM_NCHITTEST)
 	{

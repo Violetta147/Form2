@@ -1,8 +1,5 @@
 #pragma once
-#include "resource.h"
 #include "include/Tournament.h"
-#include <Windows.h>
-#pragma comment(lib, "User32.lib")
 using namespace System;
 using namespace System::ComponentModel;
 using namespace System::Collections;
@@ -12,9 +9,6 @@ using namespace System::Drawing;
 using namespace System::Collections::Generic;
 using namespace System::Resources;
 using namespace System::Reflection;
-//using namespace System::Runtime::InteropServices;
-//using namespace System::IO;
-
 
 namespace Form2 {
 
@@ -103,34 +97,22 @@ namespace Form2 {
 				this->tableLayoutPanel->Controls->Add(button, i % buttonsPerRow, i / buttonsPerRow);
 			}
 		}
-		int GetResourceId(String^ resourceName)
-		{
-			if (resourceName == "button1_Default") return IDB_PNG1;
-			if (resourceName == "button1_Hover") return IDB_PNG2;
-
-			return -1;
-		}
 		Image^ GetImageResource (String^ resourceName)
 		{
-			int resourceId = GetResourceId(resourceName);
-			if (resourceId == -1)
+			Assembly^ assembly = Assembly::GetExecutingAssembly();
+			ResourceManager^ rm = gcnew ResourceManager("Form2.MyForm", assembly);
+			Object^ resource = rm->GetObject(resourceName);
+			if (resource == nullptr)
 			{
-				return nullptr;
+				Console::WriteLine("Resource not found: " + resourceName);
 			}
-			return GetImageResource(resourceId);
-		}
-
-		Image^ GetImageResource(int resourceId)
-		{
-            HINSTANCE hInstance = (HINSTANCE)System::Runtime::InteropServices::Marshal::GetHINSTANCE(this->GetType()->Module).ToPointer();
-			HBITMAP hBitmap = (HBITMAP)LoadImage(hInstance, MAKEINTRESOURCE(resourceId), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-
-			if (hBitmap == nullptr)
+			if (resource->GetType() == array<Byte>::typeid)
 			{
-				return nullptr; // Failed to load
+				array<Byte>^ bytes = (array<Byte>^)resource;
+				System::IO::MemoryStream^ ms = gcnew System::IO::MemoryStream(bytes);
+				return Image::FromStream(ms);
 			}
-
-			return Image::FromHbitmap(IntPtr(hBitmap)); // Convert HBITMAP to managed Image^
+			return (Image^)resource;
 		}
 		void Button_MouseEnter(Object^ sender, EventArgs^ e)
 		{
