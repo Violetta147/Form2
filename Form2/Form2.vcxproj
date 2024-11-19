@@ -136,6 +136,11 @@
     <ClCompile Include="Src\Team.cpp" />
     <ClCompile Include="Src\Tournament.cpp" />
     <ClCompile Include="TransparentRenderer.cpp" />
+    <ClCompile Include="UC_HOME.cpp" />
+    <ClCompile Include="UC_MATCHES.cpp" />
+    <ClCompile Include="UC_PLAYERS.cpp" />
+    <ClCompile Include="UC_RANKING.cpp" />
+    <ClCompile Include="UC_STATS.cpp" />
     <ClCompile Include="UC_TEAMS.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +159,21 @@
     </ClInclude>
     <ClInclude Include="Neon.h" />
     <ClInclude Include="TransparentRenderer.h" />
+    <ClInclude Include="UC_HOME.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
+    <ClInclude Include="UC_MATCHES.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
+    <ClInclude Include="UC_PLAYERS.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
+    <ClInclude Include="UC_RANKING.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
+    <ClInclude Include="UC_STATS.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
     <ClInclude Include="UC_TEAMS.h">
       <FileType>CppControl</FileType>
     </ClInclude>
@@ -161,6 +181,21 @@
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_HOME.resx">
+      <DependentUpon>UC_HOME.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_MATCHES.resx">
+      <DependentUpon>UC_MATCHES.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_PLAYERS.resx">
+      <DependentUpon>UC_PLAYERS.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_RANKING.resx">
+      <DependentUpon>UC_RANKING.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC_STATS.resx">
+      <DependentUpon>UC_STATS.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UC_TEAMS.resx">
       <DependentUpon>UC_TEAMS.h</DependentUpon>

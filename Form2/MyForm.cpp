@@ -65,6 +65,7 @@ void Form2::MyForm::InitializeComponent(void)
 	this->HOME->Name = L"HOME";
 	this->HOME->Size = System::Drawing::Size(120, 24);
 	this->HOME->Text = L"HOME";
+	this->HOME->Click += gcnew System::EventHandler(this, &MyForm::HOME_Click);
 	// 
 	// TEAMS
 	// 
@@ -86,6 +87,7 @@ void Form2::MyForm::InitializeComponent(void)
 	this->PLAYERS->Name = L"PLAYERS";
 	this->PLAYERS->Size = System::Drawing::Size(120, 24);
 	this->PLAYERS->Text = L"PLAYERS";
+	this->PLAYERS->Click += gcnew System::EventHandler(this, &MyForm::PLAYERS_Click);
 	// 
 	// MATCHES
 	// 
@@ -96,6 +98,7 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MATCHES->Name = L"MATCHES";
 	this->MATCHES->Size = System::Drawing::Size(120, 24);
 	this->MATCHES->Text = L"MATCHES";
+	this->MATCHES->Click += gcnew System::EventHandler(this, &MyForm::MATCHES_Click);
 	// 
 	// STATS
 	// 
@@ -106,6 +109,7 @@ void Form2::MyForm::InitializeComponent(void)
 	this->STATS->Name = L"STATS";
 	this->STATS->Size = System::Drawing::Size(120, 24);
 	this->STATS->Text = L"STATS";
+	this->STATS->Click += gcnew System::EventHandler(this, &MyForm::STATS_Click);
 	// 
 	// RANKING
 	// 
@@ -116,6 +120,7 @@ void Form2::MyForm::InitializeComponent(void)
 	this->RANKING->Name = L"RANKING";
 	this->RANKING->Size = System::Drawing::Size(120, 24);
 	this->RANKING->Text = L"RANKING";
+	this->RANKING->Click += gcnew System::EventHandler(this, &MyForm::RANKING_Click);
 	// 
 	// ContainerPanel
 	// 
@@ -164,7 +169,7 @@ void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)
 	int buttonWidth = (availableWidth - (numButtons - 1) * padding) / numButtons;
 
 	// Optionally, ensure the buttons are not too wide (set a max width if necessary)
-	buttonWidth = std::fmin(buttonWidth, 200); 
+	buttonWidth = std::fmin(buttonWidth, 200);
 	int totalButtonWidth = (buttonWidth * numButtons) + (padding * (numButtons - 1));
 	int remainingWidth = containerWidth - totalButtonWidth;
 	// Distribute the remaining width as margins on both sides (left and right)
@@ -174,9 +179,9 @@ void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)
 	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(leftMargin, 0, rightMargin, 0);
 	for each (ToolStripMenuItem ^ item in this->MAINBUTTON->Items)
 	{
-		item->AutoSize = false;  
-		item->Width = buttonWidth; 
-		item->TextAlign = ContentAlignment::MiddleCenter; 
+		item->AutoSize = false;
+		item->Width = buttonWidth;
+		item->TextAlign = ContentAlignment::MiddleCenter;
 	}
 }
 
@@ -206,7 +211,7 @@ void Form2::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::Mo
 	}
 }
 
-void Form2::MyForm::WndProc(System::Windows::Forms::Message% m) 
+void Form2::MyForm::WndProc(System::Windows::Forms::Message% m)
 {
 
 	const int WM_NCCALCSIZE = 0x0083;
@@ -286,7 +291,7 @@ void Form2::MyForm::WndProc(System::Windows::Forms::Message% m)
 }
 
 void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
-{	
+{
 	hoveredItem = dynamic_cast<ToolStripMenuItem^>(sender);
 	hoveredIndex = this->MAINBUTTON->Items->IndexOf(hoveredItem);
 	//currentMenuItem only changes state when there is event of click a button and if 
@@ -294,7 +299,7 @@ void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
 	if (hoveredItem != nullptr && hoveredItem != currentMenuItem) {
 		hoveredItem->ForeColor = Color::LimeGreen;
 	}
-		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+	this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
 }
 
 void Form2::MyForm::OnMenuItemLeave(Object^ sender, EventArgs^ e)
@@ -318,12 +323,12 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 
 	int lineY = this->MAINBUTTON->Height - 15;
 
-	g->DrawLine(pen, startX, lineY, endX, lineY);	
-	
-	if (hoveredItem != nullptr && hoveredIndex != -1 )
+	g->DrawLine(pen, startX, lineY, endX, lineY);
+
+	if (hoveredItem != nullptr && hoveredIndex != -1)
 	{
 		Pen^ hoverPen = gcnew Pen(Color::LimeGreen, 2.0f);
-        System::Drawing::Rectangle itemBounds = hoveredItem->Bounds;
+		System::Drawing::Rectangle itemBounds = hoveredItem->Bounds;
 		int segmentStartX = itemBounds.Left + 10;
 		int segmentEndX = itemBounds.Right - 10;
 		g->DrawLine(hoverPen, segmentStartX, lineY, segmentEndX, lineY);
@@ -332,13 +337,13 @@ void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
 	if (currentMenuItem != nullptr) //no else?
 	{
 		currentMenuItem->ForeColor = Color::LimeGreen;
-        System::Drawing::Rectangle itemBounds = currentMenuItem->Bounds;
+		System::Drawing::Rectangle itemBounds = currentMenuItem->Bounds;
 		int segmentStartX = itemBounds.Left + 10;
 		int segmentEndX = itemBounds.Right - 10;
 		Pen^ currentPen = gcnew Pen(Color::LimeGreen, 2.0f);
 		g->DrawLine(currentPen, segmentStartX, lineY, segmentEndX, lineY);
 		delete currentPen;
-	}	
+	}
 	delete pen;
 }
 //before changing the color of the button, the previous button color must be reset
@@ -349,7 +354,19 @@ void Form2::MyForm::ResetButtonColors()
 		item->ForeColor = Color::FromArgb(120, Color::White);
 	}
 }
-
+System::Void Form2::MyForm::HOME_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		this->MAINBUTTON->Invalidate();
+		//draw the line under the current button
+		// Add the user control to the panel
+		UC_HOME^ ucHome = gcnew Form2::UC_HOME();
+		addUserControl(ucHome);
+	}
+}
 System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	if (currentMenuItem != sender)
@@ -363,8 +380,60 @@ System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArg
 		addUserControl(ucTeams);
 	}
 }
+System::Void Form2::MyForm::PLAYERS_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		//draw the line under the current button
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+		// Add the user control to the panel
+		UC_PLAYERS^ ucPlayers = gcnew Form2::UC_PLAYERS();
+		addUserControl(ucPlayers);
+	}
+}
+System::Void Form2::MyForm::MATCHES_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		//draw the line under the current button
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+		// Add the user control to the panel
+		UC_MATCHES^ ucMatches = gcnew Form2::UC_MATCHES();
+		addUserControl(ucMatches);
+	}
+}
+System::Void Form2::MyForm::STATS_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		//draw the line under the current button
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+		// Add the user control to the panel
+		UC_STATS^ ucStats = gcnew Form2::UC_STATS();
+		addUserControl(ucStats);
+	}
+}
+System::Void Form2::MyForm::RANKING_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (currentMenuItem != sender)
+	{
+		ResetButtonColors(); // if there is a previous button clicked, reset the color
+		currentMenuItem = dynamic_cast<ToolStripMenuItem^>(sender);
+		//draw the line under the current button
+		this->MAINBUTTON->Invalidate(); //Trigger Paint event ~ repaint
+		// Add the user control to the panel
+		UC_RANKING^ ucRanking = gcnew Form2::UC_RANKING();
+		addUserControl(ucRanking);
+	}
+}
 System::Void Form2::MyForm::addUserControl(UserControl^ userControl)
-{	
+{
 	//why this doesn't check if that's the first time the userControl is added?
 	userControl->Dock = DockStyle::Fill;
 	this->ContainerPanel->Controls->Clear(); //can this be hidden?
