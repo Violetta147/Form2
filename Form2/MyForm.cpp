@@ -5,6 +5,7 @@ using json = nlohmann::ordered_json;
 Form2::MyForm::MyForm(void)
 {	
 	InitializeComponent();
+	initialize();
 	ConfigureMainMenuStrip();
 	ConfigureContainerPanel();
 	this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
@@ -101,7 +102,6 @@ Form2::MyForm::~MyForm()
 }
 void Form2::MyForm::InitializeComponent(void)
 {
-	System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 	this->MAINBUTTON = (gcnew System::Windows::Forms::MenuStrip());
 	this->HOME = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->TEAMS = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -110,20 +110,62 @@ void Form2::MyForm::InitializeComponent(void)
 	this->STATS = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->RANKING = (gcnew System::Windows::Forms::ToolStripMenuItem());
 	this->ContainerPanel = (gcnew System::Windows::Forms::Panel());
-	this->MAINBUTTON->SuspendLayout();
 	this->SuspendLayout();
+	// 
+	// MAINBUTTON
+	// 
+	this->MAINBUTTON->ImageScalingSize = System::Drawing::Size(20, 20);
+	this->MAINBUTTON->Location = System::Drawing::Point(0, 0);
+	this->MAINBUTTON->Name = L"MAINBUTTON";
+	this->MAINBUTTON->Size = System::Drawing::Size(200, 24);
+	this->MAINBUTTON->TabIndex = 1;
+	// 
+	// HOME
+	// 
+	this->HOME->Name = L"HOME";
+	this->HOME->Size = System::Drawing::Size(32, 19);
+	// 
+	// TEAMS
+	// 
+	this->TEAMS->Name = L"TEAMS";
+	this->TEAMS->Size = System::Drawing::Size(32, 19);
+	// 
+	// PLAYERS
+	// 
+	this->PLAYERS->Name = L"PLAYERS";
+	this->PLAYERS->Size = System::Drawing::Size(32, 19);
+	// 
+	// MATCHES
+	// 
+	this->MATCHES->Name = L"MATCHES";
+	this->MATCHES->Size = System::Drawing::Size(32, 19);
+	// 
+	// STATS
+	// 
+	this->STATS->Name = L"STATS";
+	this->STATS->Size = System::Drawing::Size(32, 19);
+	// 
+	// RANKING
+	// 
+	this->RANKING->Name = L"RANKING";
+	this->RANKING->Size = System::Drawing::Size(32, 19);
+	// 
+	// ContainerPanel
+	// 
+	this->ContainerPanel->Location = System::Drawing::Point(0, 0);
+	this->ContainerPanel->Name = L"ContainerPanel";
+	this->ContainerPanel->Size = System::Drawing::Size(200, 100);
+	this->ContainerPanel->TabIndex = 0;
 	// 
 	// MyForm
 	// 
-	this->DoubleBuffered = true;
 	this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-	this->ClientSize = System::Drawing::Size(1200, 700);
-	formSize = this->ClientSize;
-	this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 	this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+	this->ClientSize = System::Drawing::Size(1200, 700);
 	this->Controls->Add(this->ContainerPanel);
 	this->Controls->Add(this->MAINBUTTON);
+	this->DoubleBuffered = true;
 	this->ForeColor = System::Drawing::Color::Transparent;
 	this->MainMenuStrip = this->MAINBUTTON;
 	this->Name = L"MyForm";
@@ -132,7 +174,10 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseDown);
 	this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseMove);
 	this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseUp);
-	this->Resize += gcnew System::EventHandler(this, &MyForm::OnResize); // need to check later the order of logic
+	this->Resize += gcnew System::EventHandler(this, &MyForm::OnResize);
+	this->ResumeLayout(false);
+	this->PerformLayout();
+
 }
 
 void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)

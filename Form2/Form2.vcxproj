@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file-handling\read.cpp" />
+    <ClCompile Include="Loading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Neon.cpp" />
@@ -149,6 +150,9 @@
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Team.h" />
     <ClInclude Include="include\Tournament.h" />
+    <ClInclude Include="Loading.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -30,6 +30,63 @@ namespace Form2 {
 		MyForm(void);
 	protected:
 		~MyForm();
+
+            virtual property System::Windows::Forms::CreateParams^ CreateParams
+            {
+                System::Windows::Forms::CreateParams^ get() override
+                {
+                    System::Windows::Forms::CreateParams^ cp = Form::CreateParams;
+                    cp->ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                    return cp;
+                }
+            }
+			Bitmap^ BackGround;
+			Bitmap^ BackGroundTemp;
+	protected: virtual void OnPaint(PaintEventArgs^ e) override
+			{
+				Graphics^ dc = e->Graphics;
+				dc->DrawImageUnscaled(BackGround, 0, 0);
+				__super::OnPaint(e);
+			}
+            protected:
+                !MyForm()
+                {
+                    if (components != nullptr)
+                    {
+                        delete components;
+                    }
+                    if (BackGroundTemp != nullptr)
+                    {
+                        delete BackGroundTemp;
+                    }
+                    if (BackGround != nullptr)
+                    {
+                        delete BackGround;
+                    }
+                }
+	private: void initialize()
+	{
+		SetStyle(ControlStyles::UserPaint, true);
+		SetStyle(ControlStyles::AllPaintingInWmPaint, true);
+		SetStyle(ControlStyles::DoubleBuffer, true);
+		Assembly^ assembly = Assembly::GetExecutingAssembly();
+		ResourceManager^ rm = gcnew ResourceManager("Form2.MyForm", assembly);
+		Object^ resource = rm->GetObject(L"$This.BackgroundImage");
+		Image^ image;
+		if (resource->GetType() == array<Byte>::typeid)
+		{
+			array<Byte>^ bytes = (array<Byte>^)resource;
+			System::IO::MemoryStream^ ms = gcnew System::IO::MemoryStream(bytes);
+			image = Image::FromStream(ms);
+		}
+		else
+		{
+			image = (Image^)resource;
+		}
+
+		BackGroundTemp = gcnew Bitmap(image);
+		BackGround = gcnew Bitmap(BackGroundTemp, BackGroundTemp->Width, BackGroundTemp->Height);
+	}
 	private:
 		System::ComponentModel::Container^ components;
 		System::Drawing::Size formSize;

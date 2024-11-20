@@ -33,6 +33,7 @@ namespace Form2 {
 				delete components;
 			}
 		}
+
 	private:
 		System::ComponentModel::Container ^components;
 		TableLayoutPanel^ tableLayoutPanel = gcnew TableLayoutPanel();
@@ -47,8 +48,7 @@ namespace Form2 {
 			this->SuspendLayout();
 			// 
 			// UC_TEAMS
-			// 
-			this->DoubleBuffered = true;
+			//
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoScroll = true;
@@ -109,7 +109,7 @@ namespace Form2 {
 		Image^ GetImageResource (String^ resourceName)
 		{
 			Assembly^ assembly = Assembly::GetExecutingAssembly();
-			ResourceManager^ rm = gcnew ResourceManager("Form2.MyForm", assembly);
+			ResourceManager^ rm = gcnew ResourceManager("Form2.UC_TEAMS", assembly);
 			Object^ resource = rm->GetObject(resourceName);
 			if (resource == nullptr)
 			{
