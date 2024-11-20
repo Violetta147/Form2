@@ -3,11 +3,57 @@
 using json = nlohmann::ordered_json;
 
 Form2::MyForm::MyForm(void)
-{
+{	
 	InitializeComponent();
-	tour = new Tournament(read_tournament("tournament.json")); // does this lead to wrong memory management?
-	tour->get_all_data();
-	formSize = this->ClientSize;
+	ConfigureMainMenuStrip();
+	ConfigureContainerPanel();
+	this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
+	this->MAINBUTTON->ResumeLayout(false);
+	this->MAINBUTTON->PerformLayout();
+	this->ResumeLayout(false);
+	this->PerformLayout();
+}
+
+void Form2::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
+{
+	try
+	{
+		tour = new Tournament(read_tournament("tournament.json")); // does this lead to wrong memory management?
+		tour->get_all_data();
+		MessageBox::Show("Tournament data loaded successfully", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+	}
+	catch (const std::exception& )
+	{
+		MessageBox::Show("Failed to load tournament data", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
+
+}
+
+void Form2::MyForm::ConfigureMainMenuStrip()
+{
+	this->MAINBUTTON->AllowMerge = false;
+	this->MAINBUTTON->AutoSize = false;
+	this->MAINBUTTON->BackColor = System::Drawing::Color::Transparent;
+	this->MAINBUTTON->Font = (gcnew System::Drawing::Font(L"Showcard Gothic", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6)
+	{
+		this->HOME, this->TEAMS,
+		this->PLAYERS, this->MATCHES, this->STATS, this->RANKING
+	});
+	this->MAINBUTTON->Location = System::Drawing::Point(0, 0);
+	this->MAINBUTTON->Name = L"MAINBUTTON";
+	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(120, 2, 120, 2);
+	this->MAINBUTTON->Size = System::Drawing::Size(1200, 65);
+	this->MAINBUTTON->TabIndex = 0;
+
+	//...
+	ConfigureMenuItem(HOME, L"HOME", gcnew System::EventHandler(this, &MyForm::HOME_Click));
+	ConfigureMenuItem(TEAMS, L"TEAMS", gcnew System::EventHandler(this, &MyForm::TEAMS_Click));
+	ConfigureMenuItem(PLAYERS, L"PLAYERS", gcnew System::EventHandler(this, &MyForm::PLAYERS_Click));
+	ConfigureMenuItem(MATCHES, L"MATCHES", gcnew System::EventHandler(this, &MyForm::MATCHES_Click));
+	ConfigureMenuItem(STATS, L"STATS", gcnew System::EventHandler(this, &MyForm::STATS_Click));
+	ConfigureMenuItem(RANKING, L"RANKING", gcnew System::EventHandler(this, &MyForm::RANKING_Click));
+
 	this->MAINBUTTON->Renderer = gcnew TransparentRenderer();
 	for each (ToolStripMenuItem ^ item in MAINBUTTON->Items)
 	{
@@ -17,10 +63,39 @@ Form2::MyForm::MyForm(void)
 	this->MAINBUTTON->Paint += gcnew PaintEventHandler(this, &Form2::MyForm::OnMenuStripPaint); //draw whiteline
 }
 
+void Form2::MyForm::ConfigureMenuItem(ToolStripMenuItem^ item, String^ text, EventHandler^ click)
+{
+	item->AutoSize = false;
+	item->BackColor = System::Drawing::Color::Transparent;
+	item->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(0)));
+	item->ForeColor = System::Drawing::Color::White;
+	item->Name = text;
+	item->Size = System::Drawing::Size(120, 24); //...?
+	item->Text = text;
+	item->TextAlign = ContentAlignment::MiddleCenter;
+	item->Click += click;
+}
+
+void Form2::MyForm::ConfigureContainerPanel()
+{
+	this->ContainerPanel->AutoScroll = true; //...?
+	this->ContainerPanel->AutoSize = true;
+	this->ContainerPanel->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+	this->ContainerPanel->BackColor = System::Drawing::Color::Transparent;
+	this->ContainerPanel->Dock = System::Windows::Forms::DockStyle::Fill;
+	this->ContainerPanel->Location = System::Drawing::Point(0, 65);
+	this->ContainerPanel->Name = L"ContainerPanel";
+	this->ContainerPanel->Size = System::Drawing::Size(1200, 635);
+	this->ContainerPanel->TabIndex = 1;
+}
+
+
 Form2::MyForm::~MyForm()
 {
 	if (components)
-	{
+	{	
+		delete tour;
 		delete components;
 	}
 }
@@ -38,105 +113,18 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MAINBUTTON->SuspendLayout();
 	this->SuspendLayout();
 	// 
-	// MAINBUTTON
-	// 
-	this->MAINBUTTON->AutoSize = false;
-	this->MAINBUTTON->BackColor = System::Drawing::Color::Transparent;
-	this->MAINBUTTON->Font = (gcnew System::Drawing::Font(L"Showcard Gothic", 9, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->MAINBUTTON->ImageScalingSize = System::Drawing::Size(20, 20);
-	this->MAINBUTTON->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {
-		this->HOME, this->TEAMS,
-			this->PLAYERS, this->MATCHES, this->STATS, this->RANKING
-	});
-	this->MAINBUTTON->Location = System::Drawing::Point(0, 0);
-	this->MAINBUTTON->Name = L"MAINBUTTON";
-	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(240, 2, 240, 2);
-	this->MAINBUTTON->Size = System::Drawing::Size(1200, 65);
-	this->MAINBUTTON->TabIndex = 0;
-	this->MAINBUTTON->Text = L"menuStrip1";
-	// 
-	// HOME
-	// 
-	this->HOME->AutoSize = false;
-	this->HOME->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->HOME->ForeColor = System::Drawing::Color::White;
-	this->HOME->Name = L"HOME";
-	this->HOME->Size = System::Drawing::Size(120, 24);
-	this->HOME->Text = L"HOME";
-	// 
-	// TEAMS
-	// 
-	this->TEAMS->AutoSize = false;
-	this->TEAMS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->TEAMS->ForeColor = System::Drawing::Color::White;
-	this->TEAMS->Name = L"TEAMS";
-	this->TEAMS->Size = System::Drawing::Size(120, 24);
-	this->TEAMS->Text = L"TEAMS";
-	this->TEAMS->Click += gcnew System::EventHandler(this, &MyForm::TEAMS_Click);
-	// 
-	// PLAYERS
-	// 
-	this->PLAYERS->AutoSize = false;
-	this->PLAYERS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->PLAYERS->ForeColor = System::Drawing::Color::White;
-	this->PLAYERS->Name = L"PLAYERS";
-	this->PLAYERS->Size = System::Drawing::Size(120, 24);
-	this->PLAYERS->Text = L"PLAYERS";
-	// 
-	// MATCHES
-	// 
-	this->MATCHES->AutoSize = false;
-	this->MATCHES->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->MATCHES->ForeColor = System::Drawing::Color::White;
-	this->MATCHES->Name = L"MATCHES";
-	this->MATCHES->Size = System::Drawing::Size(120, 24);
-	this->MATCHES->Text = L"MATCHES";
-	// 
-	// STATS
-	// 
-	this->STATS->AutoSize = false;
-	this->STATS->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->STATS->ForeColor = System::Drawing::Color::White;
-	this->STATS->Name = L"STATS";
-	this->STATS->Size = System::Drawing::Size(120, 24);
-	this->STATS->Text = L"STATS";
-	// 
-	// RANKING
-	// 
-	this->RANKING->AutoSize = false;
-	this->RANKING->Font = (gcnew System::Drawing::Font(L"Arial Rounded MT Bold", 10.2F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-		static_cast<System::Byte>(0)));
-	this->RANKING->ForeColor = System::Drawing::Color::White;
-	this->RANKING->Name = L"RANKING";
-	this->RANKING->Size = System::Drawing::Size(120, 24);
-	this->RANKING->Text = L"RANKING";
-	// 
-	// ContainerPanel
-	// 
-	this->ContainerPanel->BackColor = System::Drawing::Color::Transparent;
-	this->ContainerPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-	this->ContainerPanel->Location = System::Drawing::Point(0, 65);
-	this->ContainerPanel->Name = L"ContainerPanel";
-	this->ContainerPanel->Size = System::Drawing::Size(1200, 635);
-	this->ContainerPanel->TabIndex = 1;
-	// 
 	// MyForm
 	// 
+	this->DoubleBuffered = true;
 	this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 	this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+	this->ClientSize = System::Drawing::Size(1200, 700);
+	formSize = this->ClientSize;
 	this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 	this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-	this->ClientSize = System::Drawing::Size(1200, 700);
 	this->Controls->Add(this->ContainerPanel);
 	this->Controls->Add(this->MAINBUTTON);
-	this->DoubleBuffered = true;
-	this->ForeColor = System::Drawing::SystemColors::ControlText;
+	this->ForeColor = System::Drawing::Color::Transparent;
 	this->MainMenuStrip = this->MAINBUTTON;
 	this->Name = L"MyForm";
 	this->ShowIcon = false;
@@ -144,40 +132,42 @@ void Form2::MyForm::InitializeComponent(void)
 	this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseDown);
 	this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseMove);
 	this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::OnMouseUp);
-	this->Resize += gcnew System::EventHandler(this, &MyForm::OnResize);
-	this->MAINBUTTON->ResumeLayout(false);
-	this->MAINBUTTON->PerformLayout();
-	this->ResumeLayout(false);
-
+	this->Resize += gcnew System::EventHandler(this, &MyForm::OnResize); // need to check later the order of logic
 }
 
 void Form2::MyForm::OnResize(Object^ sender, EventArgs^ e)
-{
+{	
+	Console::WriteLine("OnResize");
 	// Container width (MenuStrip)
-	int containerWidth = this->ClientSize.Width;
+	int containerWidth = this->ClientSize.Width; //is this correct
 	int numButtons = 6;
-	int padding = 10; // Padding between buttons (space between buttons)
+	float padding = 10; // Padding between buttons (space between buttons)
 
 	// Subtract left and right margins for centering the buttons
-	int marginSpace = 40;  // Total margin space to be distributed on both sides of the buttons (can be adjusted)
-	int availableWidth = containerWidth - marginSpace;
-	int buttonWidth = (availableWidth - (numButtons - 1) * padding) / numButtons;
+	float marginSpace = 40;  // Total margin space to be distributed on both sides of the buttons (can be adjusted)
+	float availableWidth = containerWidth - marginSpace;
+	float buttonWidth = (availableWidth - (numButtons - 1) * padding) / numButtons;
 
 	// Optionally, ensure the buttons are not too wide (set a max width if necessary)
 	buttonWidth = std::fmin(buttonWidth, 200); 
-	int totalButtonWidth = (buttonWidth * numButtons) + (padding * (numButtons - 1));
-	int remainingWidth = containerWidth - totalButtonWidth;
+	float totalButtonWidth = (buttonWidth * numButtons) + (padding * (numButtons - 1));
+	float remainingWidth = containerWidth - totalButtonWidth;
 	// Distribute the remaining width as margins on both sides (left and right)
-	int leftMargin = remainingWidth / 2;
-	int rightMargin = remainingWidth / 2;
+	float leftMargin = remainingWidth / 2.0;
+	float rightMargin = remainingWidth / 2.0;
 
 	this->MAINBUTTON->Padding = System::Windows::Forms::Padding(leftMargin, 0, rightMargin, 0);
 	for each (ToolStripMenuItem ^ item in this->MAINBUTTON->Items)
 	{
 		item->AutoSize = false;  
 		item->Width = buttonWidth; 
+		if (item != RANKING) // Center the text for the first and last buttons
+		{
+			item->Margin = System::Windows::Forms::Padding(0, 0, padding, 0);
+		}
 		item->TextAlign = ContentAlignment::MiddleCenter; 
 	}
+	//how tf redraw how?
 }
 
 void Form2::MyForm::OnMouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
@@ -206,87 +196,9 @@ void Form2::MyForm::OnMouseUp(System::Object^ sender, System::Windows::Forms::Mo
 	}
 }
 
-void Form2::MyForm::WndProc(System::Windows::Forms::Message% m) 
-{
-
-	const int WM_NCCALCSIZE = 0x0083;
-	const int WM_SYSCOMMAND = 0x0112;
-	const int SC_MINIMIZE = 0xF020;
-	const int SC_RESTORE = 0xF120;
-	const int WM_NCHITTEST = 0x0084;
-
-	//Resize/WM_NCHITTEST values
-	const int HTCLIENT = 1;
-	const int HTLEFT = 10;
-	const int HTRIGHT = 11;
-	const int HTTOP = 12;
-	const int HTTOPLEFT = 13;
-	const int HTTOPRIGHT = 14;
-	const int HTBOTTOM = 15;
-	const int HTBOTTOMLEFT = 16;
-	const int HTBOTTOMRIGHT = 17;
-	const int resizeAreaSize = 10;
-	if (m.Msg == WM_NCHITTEST)
-	{
-		System::Windows::Forms::Form::WndProc(m);
-		if (this->WindowState == System::Windows::Forms::FormWindowState::Normal)
-		{
-			if ((int)m.Result == HTCLIENT)
-			{
-				System::Drawing::Point screenPoint = System::Drawing::Point(m.LParam.ToInt32());
-				System::Drawing::Point clientPoint = this->PointToClient(screenPoint);
-
-				if (clientPoint.Y <= resizeAreaSize)
-				{
-					if (clientPoint.X <= resizeAreaSize)
-						m.Result = (System::IntPtr)HTTOPLEFT;
-					else if (clientPoint.X < (this->Size.Width - resizeAreaSize))
-						m.Result = (System::IntPtr)HTTOP;
-					else
-						m.Result = (System::IntPtr)HTTOPRIGHT;
-				}
-				else if (clientPoint.Y <= (this->Size.Height - resizeAreaSize))
-				{
-					if (clientPoint.X <= resizeAreaSize)
-						m.Result = (System::IntPtr)HTLEFT;
-					else if (clientPoint.X > (this->Width - resizeAreaSize))
-						m.Result = (System::IntPtr)HTRIGHT;
-				}
-				else
-				{
-					if (clientPoint.X <= resizeAreaSize)
-						m.Result = (System::IntPtr)HTBOTTOMLEFT;
-					else if (clientPoint.X < (this->Size.Width - resizeAreaSize))
-						m.Result = (System::IntPtr)HTBOTTOM;
-					else
-						m.Result = (System::IntPtr)HTBOTTOMRIGHT;
-				}
-			}
-		}
-		return;
-	}
-
-	// Remove border and keep snap window
-	if (m.Msg == WM_NCCALCSIZE && m.WParam.ToInt32() == 1)
-	{
-		System::Windows::Forms::Form::WndProc(m);
-		return;
-	}
-
-	// Handle minimize and restore to keep form size
-	if (m.Msg == WM_SYSCOMMAND)
-	{
-		int wParam = (m.WParam.ToInt32() & 0xFFF0);
-		if (wParam == SC_MINIMIZE)
-			formSize = this->ClientSize;
-		if (wParam == SC_RESTORE)
-			this->Size = formSize;
-	}
-	System::Windows::Forms::Form::WndProc(m);
-}
-
 void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
 {	
+		Console::WriteLine("OnMenuItemHover");
 	hoveredItem = dynamic_cast<ToolStripMenuItem^>(sender);
 	hoveredIndex = this->MAINBUTTON->Items->IndexOf(hoveredItem);
 	//currentMenuItem only changes state when there is event of click a button and if 
@@ -298,7 +210,8 @@ void Form2::MyForm::OnMenuItemHover(Object^ sender, EventArgs^ e)
 }
 
 void Form2::MyForm::OnMenuItemLeave(Object^ sender, EventArgs^ e)
-{
+{	
+	Console::WriteLine("OnMenuItemLeave");
 	if (hoveredItem != nullptr && hoveredItem != currentMenuItem) {
 		// Revert the text color back to the default 
 		hoveredItem->ForeColor = Color::FromArgb(120, Color::White);
@@ -309,36 +222,39 @@ void Form2::MyForm::OnMenuItemLeave(Object^ sender, EventArgs^ e)
 }
 
 void Form2::MyForm::OnMenuStripPaint(Object^ sender, PaintEventArgs^ e)
-{
+{	
+	//need more well calculated size of the greenlime line
 	Graphics^ g = e->Graphics;
 	Pen^ pen = gcnew Pen(Color::FromArgb(120, Color::White));
+	pen->Width = 2.0f;
 
-	int startX = this->HOME->Bounds.Left + 10;
-	int endX = this->RANKING->Bounds.Right - 10;
+	int startX = this->HOME->Bounds.Left - this->HOME->Padding.Right;
+	int endX = this->RANKING->Bounds.Right + this->RANKING->Padding.Left;
 
-	int lineY = this->MAINBUTTON->Height - 15;
+	int lineY = this->HOME->Bounds.Bottom + 2;
 
 	g->DrawLine(pen, startX, lineY, endX, lineY);	
+	pen->Color = Color::LimeGreen;
+	pen->Width = 2.0f;
 	
 	if (hoveredItem != nullptr && hoveredIndex != -1 )
-	{
-		Pen^ hoverPen = gcnew Pen(Color::LimeGreen, 2.0f);
+	{	
+		Console::WriteLine("hoveredItem");
         System::Drawing::Rectangle itemBounds = hoveredItem->Bounds;
-		int segmentStartX = itemBounds.Left + 10;
-		int segmentEndX = itemBounds.Right - 10;
-		g->DrawLine(hoverPen, segmentStartX, lineY, segmentEndX, lineY);
-		delete hoverPen;
+		int segmentStartX = itemBounds.Left - hoveredItem->Padding.Right;
+		int segmentEndX = itemBounds.Right + hoveredItem->Padding.Right;
+		g->DrawLine(pen, segmentStartX, lineY, segmentEndX, lineY);
 	}
 	if (currentMenuItem != nullptr) //no else?
-	{
+	{	
+		Console::WriteLine("currentMenuItem");
 		currentMenuItem->ForeColor = Color::LimeGreen;
         System::Drawing::Rectangle itemBounds = currentMenuItem->Bounds;
-		int segmentStartX = itemBounds.Left + 10;
-		int segmentEndX = itemBounds.Right - 10;
-		Pen^ currentPen = gcnew Pen(Color::LimeGreen, 2.0f);
-		g->DrawLine(currentPen, segmentStartX, lineY, segmentEndX, lineY);
-		delete currentPen;
+		int segmentStartX = itemBounds.Left - currentMenuItem->Padding.Right;
+		int segmentEndX = itemBounds.Right + currentMenuItem->Padding.Right;
+		g->DrawLine(pen, segmentStartX, lineY, segmentEndX, lineY);
 	}	
+	Console::WriteLine("OnMenuStripPaint");
 	delete pen;
 }
 //before changing the color of the button, the previous button color must be reset
@@ -349,7 +265,10 @@ void Form2::MyForm::ResetButtonColors()
 		item->ForeColor = Color::FromArgb(120, Color::White);
 	}
 }
+System::Void Form2::MyForm::HOME_Click(Object^ sender, EventArgs^ e)
+{
 
+}
 System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	if (currentMenuItem != sender)
@@ -362,6 +281,22 @@ System::Void Form2::MyForm::TEAMS_Click(System::Object^ sender, System::EventArg
 		UC_TEAMS^ ucTeams = gcnew Form2::UC_TEAMS(tour);
 		addUserControl(ucTeams);
 	}
+}
+System::Void Form2::MyForm::MATCHES_Click(Object^ sender, EventArgs^ e)
+{
+
+}
+System::Void Form2::MyForm::STATS_Click(Object^ sender, EventArgs^ e)
+{
+
+}
+System::Void Form2::MyForm::RANKING_Click(Object^ sender, EventArgs^ e)
+{
+
+}
+System::Void Form2::MyForm::PLAYERS_Click(Object^ sender, EventArgs^ e)
+{
+
 }
 System::Void Form2::MyForm::addUserControl(UserControl^ userControl)
 {	
