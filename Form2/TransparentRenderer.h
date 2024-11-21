@@ -1,4 +1,5 @@
 #pragma once
+
 ref class TransparentRenderer : public System::Windows::Forms::ToolStripProfessionalRenderer
 {
 protected:
