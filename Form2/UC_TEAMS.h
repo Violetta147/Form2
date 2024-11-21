@@ -16,12 +16,12 @@ namespace Form2 {
 	{
 	public:
 		UC_TEAMS(Tournament* tour)
-		{
+		{	
 			InitializeComponent();
 			this->Load += gcnew System::EventHandler(this, &Form2::UC_TEAMS::UC_TEAMS_Load);
 			this->Resize += gcnew EventHandler(this, &UC_TEAMS::UC_TEAMS_Resize);
-			tableLayoutPanel->Dock = DockStyle::Fill;
-			this->Controls->Add(tableLayoutPanel);
+			this->SetStyle(ControlStyles::DoubleBuffer | ControlStyles::UserPaint | ControlStyles::AllPaintingInWmPaint, true);
+			this->UpdateStyles();
 			this->tour = tour;
 		}
 
@@ -39,7 +39,9 @@ namespace Form2 {
 		TableLayoutPanel^ tableLayoutPanel = gcnew TableLayoutPanel();
 		int minButtonsPerRow = 1;
 		int maxButtonsPerRow = 5;
-		const int buttonWidth = 150;
+		const int buttonWidth = 220;
+		const int buttonHeight = 150;
+		const int buttonSpacing = 24;
 		Tournament* tour;
 
 #pragma region Windows Form Designer generated code
@@ -48,13 +50,13 @@ namespace Form2 {
 			this->SuspendLayout();
 			// 
 			// UC_TEAMS
-			//
+			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::Transparent;
 			this->Name = L"UC_TEAMS";
-			this->Padding = System::Windows::Forms::Padding(100);
+			this->Padding = System::Windows::Forms::Padding(100, 100, 0, 0);
 			this->Size = System::Drawing::Size(992, 661);
 			this->ResumeLayout(false);
 
@@ -62,11 +64,13 @@ namespace Form2 {
 
 		void UC_TEAMS_Load(Object^ sender, EventArgs^ e)
 		{	
+			Console::WriteLine("Load");
 			int teamCount = tour->get_team_count();
 			GenerateTeamButtons(teamCount);
 		}
 		void UC_TEAMS_Resize(Object^ sender, EventArgs^ e)
 		{	
+			Console::WriteLine("Resizing");
 			int teamCount = tour->get_team_count();
 			GenerateTeamButtons(teamCount);
 		}
@@ -74,7 +78,7 @@ namespace Form2 {
 		{	
 			this->tableLayoutPanel->Controls->Clear();
 			this->tableLayoutPanel->SuspendLayout();
-			int buttonsPerRow = std::fmax(minButtonsPerRow, std::fmin(maxButtonsPerRow, this->tableLayoutPanel->Width / buttonWidth));
+			int buttonsPerRow = std::fmax(minButtonsPerRow, std::fmin(maxButtonsPerRow, this->tableLayoutPanel->Width + buttonSpacing / buttonWidth + buttonSpacing));
 			int rows = (int)ceil((double)teamCount / buttonsPerRow);
 
 			this->tableLayoutPanel->ColumnCount = buttonsPerRow;
@@ -83,12 +87,12 @@ namespace Form2 {
 			this->tableLayoutPanel->ColumnStyles->Clear();
 			for (int i = 0; i < buttonsPerRow; i++)
 			{
-				this->tableLayoutPanel->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Percent, 100 / buttonsPerRow));
+				this->tableLayoutPanel->ColumnStyles->Add(gcnew ColumnStyle(SizeType::Absolute, buttonWidth + buttonSpacing));
 			}
 			this->tableLayoutPanel->RowStyles->Clear();
 			for (int i = 0; i < rows; i++)
 			{
-				this->tableLayoutPanel->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 100 / rows));
+				this->tableLayoutPanel->RowStyles->Add(gcnew RowStyle(SizeType::Absolute, buttonHeight + buttonSpacing));
 			}
 			for (int i = 0; i < teamCount; i++)
 			{
@@ -103,13 +107,16 @@ namespace Form2 {
 
 				this->tableLayoutPanel->Controls->Add(button, i % buttonsPerRow, i / buttonsPerRow);
 			}
+			tableLayoutPanel->Dock = DockStyle::Fill;
+			tableLayoutPanel->AutoScroll = true;
+			this->Controls->Add(tableLayoutPanel);
 			this->tableLayoutPanel->ResumeLayout(false);
 			this->tableLayoutPanel->PerformLayout();
 		}
 		Image^ GetImageResource (String^ resourceName)
 		{
 			Assembly^ assembly = Assembly::GetExecutingAssembly();
-			ResourceManager^ rm = gcnew ResourceManager("Form2.UC_TEAMS", assembly);
+			ResourceManager^ rm = gcnew ResourceManager("Form2.MyForm", assembly);
 			Object^ resource = rm->GetObject(resourceName);
 			if (resource == nullptr)
 			{
