@@ -1,6 +1,11 @@
-﻿#pragma once
+#pragma once
 #include <cmath>
+#include "UC_HOME.h"
 #include "UC_TEAMS.h"
+#include "UC_PLAYERS.h"
+#include "UC_MATCHES.h"
+#include "UC_STATS.h"
+#include "UC_RANKING.h"
 #include "TransparentRenderer.h"
 #include "include/Event.h"
 #include "include/Team.h"
@@ -59,7 +64,7 @@ namespace Form2 {
 		bool dragging = false;
 		Point offset;
 		Tournament* tour;
-
+    
 		   void InitializeComponent(void);
 		   void MyForm_Load(Object^ sender, EventArgs^ e);
 		   void ConfigureMainMenuStrip();
